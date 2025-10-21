@@ -4,13 +4,10 @@ services:
   app:
     build: .
     container_name: rag-chat-app
+    env_file:
+      - .env
     ports:
       - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/rag_chat_db
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-      API_KEY: supersecretkey123
     depends_on:
       db:
         condition: service_healthy
@@ -19,11 +16,10 @@ services:
   db:
     image: mysql:8.0
     container_name: rag-chat-db
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: rag_chat_db
+    env_file:
+      - .env
     ports:
-      - "3307:3306"  # changed to 3307 to avoid local MySQL port conflicts
+      - "3307:3306"
     command: --default-authentication-plugin=mysql_native_password
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
