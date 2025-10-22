@@ -1,6 +1,5 @@
 package com.rag.chat.storage.rag_chat_storage.controller;
 
-import com.rag.chat.storage.rag_chat_storage.config.RequestResponseLoggingFilter;
 import com.rag.chat.storage.rag_chat_storage.entity.ChatSession;
 import com.rag.chat.storage.rag_chat_storage.service.ChatSessionService;
 import jakarta.validation.Valid;
