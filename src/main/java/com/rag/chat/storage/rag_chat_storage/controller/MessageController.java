@@ -1,9 +1,12 @@
 package com.rag.chat.storage.rag_chat_storage.controller;
 
+import com.rag.chat.storage.rag_chat_storage.config.RequestResponseLoggingFilter;
 import com.rag.chat.storage.rag_chat_storage.entity.ChatMessage;
 import com.rag.chat.storage.rag_chat_storage.service.ChatMessageService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 public class MessageController {
 
     private final ChatMessageService messageService;
+
+    private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
     public MessageController(ChatMessageService messageService) {
         this.messageService = messageService;
@@ -27,6 +32,7 @@ public class MessageController {
     // Add a message
     @PostMapping
     public ResponseEntity<Long> addMessage(@PathVariable Long sessionId, @Valid @RequestBody AddMessageRequest req) {
+        logger.info("MessageController addMessage called with sessionId: {}", sessionId);
         ChatMessage m = new ChatMessage();
         m.setSender(req.sender());
         m.setContent(req.content());
@@ -41,6 +47,7 @@ public class MessageController {
             @PathVariable Long sessionId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "50") int size) {
+        logger.info("MessageController getMessages called with sessionId: {}, page: {}, size: {}", sessionId, page, size);
         return ResponseEntity.ok(messageService.getMessages(sessionId, page, size));
     }
 }
